@@ -1,16 +1,13 @@
-﻿using Dictionary1.Entities;
-using System;
-using System.Globalization;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 
-namespace Dicitionary1
+namespace Course
 {
     class Program
     {
-
         static void Main(string[] args)
         {
-            Dicitionary<Vote, int> Votes = new Dicitionary<Vote, int>();
 
             Console.Write("Enter file full path: ");
             string path = Console.ReadLine();
@@ -18,35 +15,39 @@ namespace Dicitionary1
             try
             {
                 using (StreamReader sr = File.OpenText(path))
+                {
+
+                    Dictionary<string, int> dictionary = new Dictionary<string, int>();
+
                     while (!sr.EndOfStream)
                     {
-                        string line = sr.ReadLine();
-                        string[] fields = line.Split(new char[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
-                        if (fields.Length != 2)
-                            continue;
+                        string[] votingRecord = sr.ReadLine().Split(',');
+                        string candidate = votingRecord[0];
+                        int votes = int.Parse(votingRecord[1]);
 
-                        string name = fields[0].Trim();
-                        int tvc = int.Parse(fields[1].Trim());
-
-                        Vote votes = new Vote { Name = name };
-
-                        if (votes.ContainsKey(Votes))
+                        if (dictionary.ContainsKey(candidate))
                         {
-                            votes[vote] += tvc;
+                            dictionary[candidate] += votes;
+                        }
+                        else
+                        {
+                            dictionary[candidate] = votes;
                         }
                     }
 
-                Console.WriteLine("Voting result: ");
-                foreach (var entry in votes)
-                {
-                    Console.WriteLine(entry);
+                    foreach (var item in dictionary)
+                    {
+                        Console.WriteLine(item.Key + ": " + item.Value);
+                    }
                 }
             }
             catch (IOException e)
             {
-                Console.WriteLine("\r\nError trying to read file: " + e.Message);
+                Console.WriteLine("An error occurred");
+                Console.WriteLine(e.Message);
             }
+
         }
     }
 }
