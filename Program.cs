@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 
-namespace Course
+namespace Dictionary1
 {
     class Program
     {
